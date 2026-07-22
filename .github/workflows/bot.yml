@@ -1,0 +1,27 @@
+name: Telegram Bot Auto Run
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install packages
+        run: |
+          pip install python-telegram-bot
+
+      - name: Run Bot
+        run: |
+          python bot.py
