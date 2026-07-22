@@ -2,6 +2,7 @@ import logging
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
+from telegram.ext import MessageHandler, filters
     Application,
     CommandHandler,
     CallbackQueryHandler,
@@ -21,6 +22,7 @@ logging.basicConfig(
 # (နောက်ပိုင်း Render မှာ Environment Variable သုံးပါမယ်)
 # ==========================
 TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = 7115355783
 
 # ==========================
 # Main Menu
