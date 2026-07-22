@@ -1,9 +1,13 @@
 import logging
 import os
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
-from telegram.ext import MessageHandler, filters
     Application,
+    CommandHandler,
+    CallbackQueryHandler,
+    ContextTypes,
+    MessageHandler,
+    filters,
+)
     CommandHandler,
     CallbackQueryHandler,
     ContextTypes,
