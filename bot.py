@@ -1,5 +1,6 @@
 import logging
 import os
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -7,11 +8,7 @@ from telegram.ext import (
     ContextTypes,
     MessageHandler,
     filters,
-)
-    CommandHandler,
-    CallbackQueryHandler,
-    ContextTypes,
-)
+
 
 # ==========================
 # Logging
@@ -226,14 +223,9 @@ if __name__ == "__main__":
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CallbackQueryHandler(button_click))
-
-    print("Bot is running...")
-
-    app.run_polling()
-    
-    app.add_handler(CommandHandler('start', start))
 app.add_handler(CallbackQueryHandler(button_click))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, order_message))
 
+print("Bot is running...")
 
+app.run_polling()
