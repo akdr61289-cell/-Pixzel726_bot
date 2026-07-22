@@ -2,15 +2,14 @@ import logging
 import os
 
 from telegram import (
-    Update,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
+    Update,
 )
-
 from telegram.ext import (
     Application,
-    CommandHandler,
     CallbackQueryHandler,
+    CommandHandler,
     ContextTypes,
     MessageHandler,
     filters,
@@ -21,14 +20,16 @@ from telegram.ext import (
 # ==========================
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+    level=logging.INFO,
 )
 
 # ==========================
 # Bot Config
 # ==========================
+# Bot Token ကို environment variable သို့မဟုတ် တိုက်ရိုက် String ထည့်ပါ
 TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_ID = 7115355783
+
 
 # ==========================
 # Main Menu
@@ -43,11 +44,11 @@ def get_main_keyboard():
     ]
     return InlineKeyboardMarkup(keyboard)
 
+
 # ==========================
 # /start
 # ==========================
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     text = (
         "👋 *မင်္ဂလာပါ!*\n\n"
         "🎮 *Bboi_PixZeL's Gameshop* မှ ကြိုဆိုပါတယ်။\n\n"
@@ -55,26 +56,24 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.reply_text(
-        text=text,
-        parse_mode="Markdown",
-        reply_markup=get_main_keyboard()
+        text=text, parse_mode="Markdown", reply_markup=get_main_keyboard()
     )
 
+
 # ==========================
-# Button Click
+# Button Click Handler
 # ==========================
 async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     query = update.callback_query
     await query.answer()
 
     back = InlineKeyboardMarkup(
         [[InlineKeyboardButton("🔙 Back", callback_data="main_menu")]]
-    )    if query.data == "pubg":
+    )
 
+    if query.data == "pubg":
         text = (
             "🎮 *PUBG Mobile Price List*\n\n"
-
             "💎 *UC Price*\n"
             "• 60 UC - 4,614 Ks\n"
             "• 325 UC - 21,128 Ks\n"
@@ -89,23 +88,17 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• 11950 UC - 626,383 Ks\n"
             "• 16200 UC - 825,716 Ks"
         )
-
         await query.edit_message_text(
-            text=text,
-            parse_mode="Markdown",
-            reply_markup=back
+            text=text, parse_mode="Markdown", reply_markup=back
         )
 
     elif query.data == "mlbb":
-
         text = (
             "💎 *MLBB Diamond Price List*\n\n"
-
             "• Weekly Pass - 6,750 Ks\n"
             "• Twilight Pass - 35,000 Ks\n"
             "• WEB Bundle - 3,400 Ks\n"
             "• MEB Bundle - 16,800 Ks\n\n"
-
             "💠 *Diamond*\n"
             "• 11 Dia - 900 Ks\n"
             "• 22 Dia - 1,850 Ks\n"
@@ -125,15 +118,11 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• 5532 Dia - 326,000 Ks\n"
             "• 9288 Dia - 542,000 Ks"
         )
-
         await query.edit_message_text(
-            text=text,
-            parse_mode="Markdown",
-            reply_markup=back
+            text=text, parse_mode="Markdown", reply_markup=back
         )
 
     elif query.data == "payment":
-
         await query.edit_message_text(
             text=(
                 "💳 *Payment Information*\n\n"
@@ -141,29 +130,40 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "👤 Name - Aung Khant Kyaw"
             ),
             parse_mode="Markdown",
-            reply_markup=back
+            reply_markup=back,
         )
 
     elif query.data == "admin":
-
         await query.edit_message_text(
-            text=(
-                "👨‍💻 *Contact Admin*\n\n"
-                "Telegram - @pixel7k"
-            ),
+            text=("👨‍💻 *Contact Admin*\n\nTelegram - @pixel7k"),
             parse_mode="Markdown",
-            reply_markup=back
-        )elif query.data == "order":
+            reply_markup=back,
+        )
 
-    context.user_data["step"] = "game"
+    elif query.data == "order":
+        context.user_data["step"] = "game"
+        await query.edit_message_text(
+            "🛒 *Order Form*\n\n"
+            "🎮 PUBG / MLBB ဘယ် Game ဝယ်ချင်လဲ?\n\n"
+            "ဥပမာ - PUBG",
+            parse_mode="Markdown",
+        )
 
-    await query.edit_message_text(
-        "🛒 *Order Form*\n\n"
-        "🎮 PUBG / MLBB ဘယ် Game ဝယ်ချင်လဲ?\n\n"
-        "ဥပမာ - PUBG",
-        parse_mode="Markdown"
-    )async def order_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    elif query.data == "main_menu":
+        text = (
+            "👋 *မင်္ဂလာပါ!*\n\n"
+            "🎮 *Bboi_PixZeL's Gameshop* မှ ကြိုဆိုပါတယ်။\n\n"
+            "အောက်က Menu မှ လိုရာကို ရွေးချယ်နိုင်ပါတယ်။"
+        )
+        await query.edit_message_text(
+            text=text, parse_mode="Markdown", reply_markup=get_main_keyboard()
+        )
 
+
+# ==========================
+# Order Flow Handlers
+# ==========================
+async def order_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "step" not in context.user_data:
         return
 
@@ -173,7 +173,6 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if step == "game":
         context.user_data["game"] = text
         context.user_data["step"] = "package"
-
         await update.message.reply_text(
             "💎 ဘယ် Package ဝယ်ချင်လဲ?\n\nဥပမာ - 660 UC"
         )
@@ -181,58 +180,73 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif step == "package":
         context.user_data["package"] = text
         context.user_data["step"] = "gameid"
+        await update.message.reply_text("🆔 Game ID နဲ့ Server ID ပို့ပါ။")
 
-        await update.message.reply_text(
-            "🆔 Game ID နဲ့ Server ID ပို့ပါ။"
-        )    elif step == "gameid":
+    elif step == "gameid":
         context.user_data["gameid"] = text
         context.user_data["step"] = "screenshot"
-
-        await update.message.reply_text(
-            "📸 KPay Screenshot ကို အခုပို့ပေးပါ။"
-        )
+        await update.message.reply_text("📸 KPay Screenshot ကို အခုပို့ပေးပါ။")
 
     elif step == "screenshot":
-        await update.message.reply_text(
-            "❌ Screenshot ကို Photo အဖြစ်ပို့ပါ။"
-        )
+        await update.message.reply_text("❌ Screenshot ကို Photo အဖြစ်ပို့ပါ။")
 
 
 async def photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     if context.user_data.get("step") != "screenshot":
         return
 
     photo = update.message.photo[-1].file_id
 
-    game = context.user_data["game"]
-    package = context.user_data["package"]
-    gameid = context.user_data["gameid"]
+    game = context.user_data.get("game", "N/A")
+    package = context.user_data.get("package", "N/A")
+    gameid = context.user_data.get("gameid", "N/A")
+
+    username = update.effective_user.username
+    user_info = f"@{username}" if username else f"ID: {update.effective_user.id}"
 
     caption = (
-        "🛒 New Order\n\n"
-        f"🎮 Game : {game}\n"
-        f"💎 Package : {package}\n"
-        f"🆔 Game ID : {gameid}\n\n"
-        f"👤 Customer : @{update.effective_user.username}"
+        "🛒 *New Order Received*\n\n"
+        f"🎮 *Game* : {game}\n"
+        f"💎 *Package* : {package}\n"
+        f"🆔 *Game ID* : {gameid}\n\n"
+        f"👤 *Customer* : {user_info}"
     )
 
+    # Admin ထံ Order ပို့ပေးခြင်း
     await context.bot.send_photo(
-        chat_id=ADMIN_ID,
-        photo=photo,
-        caption=caption
+        chat_id=ADMIN_ID, photo=photo, caption=caption, parse_mode="Markdown"
     )
 
+    # Customer ထံ ပြန်လည်အကြောင်းပြန်ခြင်း
     await update.message.reply_text(
-        "✅ Order လက်ခံပြီးပါပြီ။\nAdmin က မကြာခင် ဆက်သွယ်ပေးပါမယ်။"
+        "✅ Order လက်ခံပြီးပါပြီ။\nAdmin က မကြာခင် စစ်ဆေးပေးပါမယ်။"
     )
 
     context.user_data.clear()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CallbackQueryHandler(button_click))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, order_message))
-app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
 
-print("Bot is running...")
 
-app.run_polling()
+# ==========================
+# Main App Execution
+# ==========================
+def main():
+    if not TOKEN:
+        print("❌ Error: BOT_TOKEN မတွေ့ပါ။ Environment Variable စစ်ဆေးပါ။")
+        return
+
+    # Application Build လုပ်ခြင်း
+    app = Application.builder().token(TOKEN).build()
+
+    # Handlers များ ထည့်သွင်းခြင်း
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(button_click))
+    app.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, order_message)
+    )
+    app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
+
+    print("🤖 Bot is running...")
+    app.run_polling()
+
+
+if __name__ == "__main__":
+    main()
