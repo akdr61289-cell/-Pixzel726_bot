@@ -20,7 +20,7 @@ logging.basicConfig(
 # BOT TOKEN
 # (နောက်ပိုင်း Render မှာ Environment Variable သုံးပါမယ်)
 # ==========================
-TOKEN = "YOUR_BOT_TOKEN"
+TOKEN = "8557159512:AAHs0mvDwoqKM1i0DG3AiIGm_zflX9Fsi_g"
 
 
 # ==========================
