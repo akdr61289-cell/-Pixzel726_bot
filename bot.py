@@ -1,5 +1,5 @@
 import logging
-
+import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -20,8 +20,7 @@ logging.basicConfig(
 # BOT TOKEN
 # (နောက်ပိုင်း Render မှာ Environment Variable သုံးပါမယ်)
 # ==========================
-TOKEN = "8557159512:AAHs0mvDwoqKM1i0DG3AiIGm_zflX9Fsi_g"
-
+TOKEN = os.getenv("BOT_TOKEN")
 
 # ==========================
 # Main Menu
