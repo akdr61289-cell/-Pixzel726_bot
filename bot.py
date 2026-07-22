@@ -227,5 +227,9 @@ if __name__ == "__main__":
     print("Bot is running...")
 
     app.run_polling()
+    
+    app.add_handler(CommandHandler('start', start))
+app.add_handler(CallbackQueryHandler(button_click))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, order_message))
 
 
